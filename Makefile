@@ -35,4 +35,4 @@ ls: ## - List 'smallest-secured-golang' docker images
 .PHONY: run
 run:	## - Run the smallest and secured golang docker image based on scratch
 	@printf "\033[32m\xE2\x9c\x93 Run the smallest and secured golang docker image based on scratch\n\033[0m"
-	@docker run smallest-secured-golang:latest
+	@docker run -p 3006:3004 golang-web-app
