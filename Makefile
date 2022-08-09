@@ -14,16 +14,18 @@ docker-pull:	## - docker pull latest images
 	@printf "\033[32m\xE2\x9c\x93 docker pull latest images\n\033[0m"
 	@docker pull golang:buster
 	@docker pull gcr.io/distroless/base
-	@docker pull gcr.io/distroless/static
 
 .PHONY: build
-build:docker-pull	## - Build the smallest and secured golang docker image based on distroless
+build:	## - Build the smallest and secured golang docker image based on distroless
 	@printf "\033[32m\xE2\x9c\x93 Build the smallest and secured golang docker image based on distroless\n\033[0m"
 	$(eval BUILDER_IMAGE=$(shell docker inspect --format='{{index .RepoDigests 0}}' golang:buster))
 	$(eval DISTROLESS_IMAGE=$(shell docker inspect --format='{{index .RepoDigests 0}}' gcr.io/distroless/base))
 	@export DOCKER_CONTENT_TRUST=1
-	@docker build -f build/Dockerfile --build-arg BUILDER_IMAGE=$(BUILDER_IMAGE) --build-arg DISTROLESS_IMAGE=$(DISTROLESS_IMAGE) -t golang-web-app .
+	@docker build --no-cache -f build/Dockerfile --build-arg BUILDER_IMAGE=$(BUILDER_IMAGE) --build-arg DISTROLESS_IMAGE=$(DISTROLESS_IMAGE) -t golang-web-app .
 
+
+.PHONY: build-full
+build-full:docker-pull build	## - Build the smallest and secured golang docker image based on distroless
 
 .PHONY: ls
 ls: ## - List 'smallest-secured-golang' docker images
